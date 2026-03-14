@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getTopicsWithCounts } from '@/lib/db';
 import { supabase } from '@/lib/supabase';
+import ImportButton from './ImportButton';
 
 export default async function AdminDashboard() {
   const topics = await getTopicsWithCounts().catch(() => []);
@@ -21,6 +22,8 @@ export default async function AdminDashboard() {
         <StatCard label="Lectures" value={totalLectures ?? 0} href="/admin/lectures" color="bg-blue-50 text-blue-700" />
         <StatCard label="Questions" value={totalQuestions ?? 0} href="/admin/questions" color="bg-violet-50 text-violet-700" />
       </div>
+
+      <ImportButton />
 
       {/* Topic overview table */}
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">

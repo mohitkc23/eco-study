@@ -17,50 +17,62 @@ const TOPIC_ICONS: Record<string, string> = {
 };
 
 export default function Sidebar({ topics }: { topics: Topic[] }) {
-  const { open } = useSidebar();
+  const { open, toggle } = useSidebar();
   const pathname = usePathname();
 
   return (
-    <aside
-      className="fixed top-14 left-0 h-[calc(100vh-56px)] bg-white border-r border-neutral-200 overflow-hidden transition-all duration-300 ease-in-out z-40"
-      style={{ width: open ? '260px' : '0px' }}
-    >
-      <div className="w-[260px] h-full overflow-y-auto py-4">
-        {/* Main nav */}
-        <div className="px-3 mb-4 space-y-0.5">
-          <SideItem href="/" label="Home" active={pathname === '/'} />
-          <SideItem href="/practice" label="Practice Questions" active={pathname.startsWith('/practice')} />
-        </div>
+    <>
+      {/* Mobile overlay */}
+      {open && (
+        <div
+          className="md:hidden sidebar-overlay animate-fade-in"
+          onClick={toggle}
+          aria-label="Close sidebar"
+        />
+      )}
 
-        <div className="px-4 mb-2">
-          <p className="text-[10px] font-semibold tracking-[0.12em] text-neutral-400 uppercase">Course Topics</p>
-        </div>
+      <aside
+        className={`fixed top-14 left-0 h-[calc(100vh-56px)] bg-white dark:bg-slate-900 border-r border-neutral-200 dark:border-slate-700/80 overflow-hidden transition-all duration-300 ease-in-out z-40`}
+        style={{ width: open ? '260px' : '0px' }}
+      >
+        <div className="w-[260px] h-full overflow-y-auto py-4">
+          {/* Main nav */}
+          <div className="px-3 mb-4 space-y-0.5">
+            <SideItem href="/" label="🏠 Home" active={pathname === '/'} />
+            <SideItem href="/practice" label="✏ Practice Questions" active={pathname.startsWith('/practice')} />
+            <SideItem href="/flashcards" label="🃏 Flashcards" active={pathname.startsWith('/flashcards')} />
+          </div>
 
-        <div className="px-3 space-y-0.5">
-          {topics.map((topic) => {
-            const isActive = pathname.startsWith(`/topics/${topic.slug}`);
-            return (
-              <Link
-                key={topic.id}
-                href={`/topics/${topic.slug}`}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  isActive
-                    ? 'bg-teal-50 text-teal-800 font-medium'
-                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
-                }`}
-              >
-                <span className="shrink-0 text-base leading-none">{TOPIC_ICONS[topic.slug] ?? '📚'}</span>
-                <span className="truncate leading-snug">{topic.name}</span>
-              </Link>
-            );
-          })}
+          <div className="px-4 mb-2">
+            <p className="text-[10px] font-semibold tracking-[0.12em] text-neutral-400 dark:text-slate-500 uppercase">Course Topics</p>
+          </div>
 
-          {topics.length === 0 && (
-            <p className="px-3 py-2 text-xs text-neutral-400">No topics yet.</p>
-          )}
+          <div className="px-3 space-y-0.5">
+            {topics.map((topic) => {
+              const isActive = pathname.startsWith(`/topics/${topic.slug}`);
+              return (
+                <Link
+                  key={topic.id}
+                  href={`/topics/${topic.slug}`}
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    isActive
+                      ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 font-medium'
+                      : 'text-neutral-600 dark:text-slate-400 hover:bg-neutral-50 dark:hover:bg-slate-800 hover:text-neutral-900 dark:hover:text-slate-100'
+                  }`}
+                >
+                  <span className="shrink-0 text-base leading-none">{TOPIC_ICONS[topic.slug] ?? '📚'}</span>
+                  <span className="truncate leading-snug">{topic.name}</span>
+                </Link>
+              );
+            })}
+
+            {topics.length === 0 && (
+              <p className="px-3 py-2 text-xs text-neutral-400">No topics yet.</p>
+            )}
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 
@@ -70,8 +82,8 @@ function SideItem({ href, label, active }: { href: string; label: string; active
       href={href}
       className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
         active
-          ? 'bg-neutral-100 text-neutral-900 font-medium'
-          : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800'
+          ? 'bg-neutral-100 dark:bg-slate-800 text-neutral-900 dark:text-slate-100 font-medium'
+          : 'text-neutral-500 dark:text-slate-400 hover:bg-neutral-50 dark:hover:bg-slate-800 hover:text-neutral-800 dark:hover:text-slate-200'
       }`}
     >
       {label}
