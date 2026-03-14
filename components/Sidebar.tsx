@@ -40,7 +40,6 @@ export default function Sidebar({ topics }: { topics: Topic[] }) {
           <div className="px-3 mb-4 space-y-0.5">
             <SideItem href="/" label="🏠 Home" active={pathname === '/'} />
             <SideItem href="/practice" label="✏ Practice Questions" active={pathname.startsWith('/practice')} />
-            <SideItem href="/flashcards" label="🃏 Flashcards" active={pathname.startsWith('/flashcards')} />
           </div>
 
           <div className="px-4 mb-2">

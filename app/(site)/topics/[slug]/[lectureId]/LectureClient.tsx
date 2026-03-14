@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import type { Lecture, Topic, Question, SessionMedia } from '@/lib/types';
 
 interface Props {
@@ -88,8 +89,8 @@ export default function LectureClient({ topic, lecture, questions, media }: Prop
           <>
             {hasNotes ? (
               <article className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-8">
-                <div className="prose prose-neutral prose-sm max-w-none prose-headings:font-semibold prose-headings:text-neutral-900 prose-p:text-neutral-700 prose-p:leading-relaxed prose-li:text-neutral-700 prose-strong:text-neutral-900 prose-code:bg-neutral-100 prose-code:px-1.5 prose-code:rounded prose-code:text-neutral-700 prose-table:text-sm">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{lecture.notes_md}</ReactMarkdown>
+                <div className="prose prose-neutral prose-sm max-w-none prose-headings:font-semibold prose-headings:text-neutral-900 prose-p:text-neutral-700 prose-p:leading-relaxed prose-li:text-neutral-700 prose-strong:text-neutral-900 prose-code:bg-neutral-100 prose-code:px-1.5 prose-code:rounded prose-code:text-neutral-700 prose-table:text-sm [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-lg [&_iframe]:my-4">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{lecture.notes_md || ''}</ReactMarkdown>
                 </div>
               </article>
             ) : (

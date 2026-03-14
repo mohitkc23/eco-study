@@ -1,15 +1,7 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import LogoutButton from './LogoutButton';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = await cookies();
-  const auth = cookieStore.get('admin_auth');
-  if (auth?.value !== 'authenticated') {
-    redirect('/admin/login');
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200 px-8 py-3 flex items-center justify-between">

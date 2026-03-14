@@ -53,7 +53,7 @@ export default async function HomePage() {
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
           Capture the core concepts of trade, mercantilism, and open-economy macro. 
-          Practice with flashcards, model answers, and session notes — all in one place.
+          Practice with model answers and session notes — all in one place.
         </p>
 
         {/* Buttons */}
@@ -63,12 +63,6 @@ export default async function HomePage() {
             className="px-8 py-3.5 bg-[#0066FF] hover:bg-blue-600 text-white font-medium text-lg rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/25"
           >
             Start Practicing for Free
-          </Link>
-          <Link
-            href="/flashcards"
-            className="px-8 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-medium text-lg rounded-full transition-all"
-          >
-            Review Flashcards
           </Link>
         </div>
       </div>

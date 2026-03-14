@@ -34,12 +34,6 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
           </div>
           <div className="flex gap-2 shrink-0 flex-wrap justify-end">
             <Link
-              href={`/flashcards?topic=${topic.id}`}
-              className="px-4 py-2 border border-teal-200 dark:border-teal-800 text-teal-600 dark:text-teal-400 text-sm font-medium rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors"
-            >
-              🃏 Flashcards
-            </Link>
-            <Link
               href={`/practice?topic=${topic.id}`}
               className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
             >

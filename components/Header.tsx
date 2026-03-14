@@ -43,7 +43,6 @@ export default function Header() {
       <nav className="flex items-center gap-1">
         <NavLink href="/" label="Home" active={pathname === '/'} />
         <NavLink href="/practice" label="Practice" active={pathname.startsWith('/practice')} />
-        <NavLink href="/flashcards" label="Flashcards" active={pathname.startsWith('/flashcards')} />
         <Link
           href="/admin"
           className="ml-1 px-3 py-1.5 text-xs font-medium text-neutral-500 dark:text-slate-400 border border-neutral-200 dark:border-slate-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-slate-800 transition-colors"

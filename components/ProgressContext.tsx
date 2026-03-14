@@ -5,25 +5,22 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 type ProgressData = {
   attempted: Record<string, boolean>;   // questionId → attempted
   correct: Record<string, boolean>;     // questionId → got it right
-  flashcardMastered: Record<string, boolean>; // questionId → mastered
 };
 
 type ProgressCtx = {
   data: ProgressData;
   markAttempted: (questionId: string) => void;
   markCorrect: (questionId: string, correct: boolean) => void;
-  markFlashcardMastered: (questionId: string, mastered: boolean) => void;
   getTopicProgress: (questionIds: string[]) => { attempted: number; correct: number; total: number };
   reset: () => void;
 };
 
-const EMPTY: ProgressData = { attempted: {}, correct: {}, flashcardMastered: {} };
+const EMPTY: ProgressData = { attempted: {}, correct: {} };
 
 const ProgressContext = createContext<ProgressCtx>({
   data: EMPTY,
   markAttempted: () => {},
   markCorrect: () => {},
-  markFlashcardMastered: () => {},
   getTopicProgress: () => ({ attempted: 0, correct: 0, total: 0 }),
   reset: () => {},
 });
@@ -38,7 +35,14 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('eco_progress');
-      if (saved) setData(JSON.parse(saved));
+      if (saved) {
+        // Strip out flashcards data if they had it stored
+        const parsed = JSON.parse(saved);
+        setData({
+          attempted: parsed.attempted || {},
+          correct: parsed.correct || {},
+        });
+      }
     } catch {}
   }, []);
 
@@ -67,14 +71,6 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const markFlashcardMastered = useCallback((questionId: string, mastered: boolean) => {
-    setData((prev) => {
-      const next = { ...prev, flashcardMastered: { ...prev.flashcardMastered, [questionId]: mastered } };
-      localStorage.setItem('eco_progress', JSON.stringify(next));
-      return next;
-    });
-  }, []);
-
   const getTopicProgress = useCallback(
     (questionIds: string[]) => ({
       total: questionIds.length,
@@ -89,7 +85,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ProgressContext.Provider value={{ data, markAttempted, markCorrect, markFlashcardMastered, getTopicProgress, reset }}>
+    <ProgressContext.Provider value={{ data, markAttempted, markCorrect, getTopicProgress, reset }}>
       {children}
     </ProgressContext.Provider>
   );

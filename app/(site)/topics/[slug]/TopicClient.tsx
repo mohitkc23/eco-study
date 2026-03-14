@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import type { Lecture } from '@/lib/types';
 
 export default function TopicClient({ lectures, topicSlug }: { lectures: Lecture[]; topicSlug: string }) {
@@ -78,18 +81,14 @@ export default function TopicClient({ lectures, topicSlug }: { lectures: Lecture
 }
 
 function NoteRenderer({ content }: { content: string }) {
-  // Simple markdown-to-HTML renderer for basic formatting
-  const lines = content.split('\n');
   return (
-    <div className="space-y-1">
-      {lines.map((line, i) => {
-        if (line.startsWith('## ')) return <h3 key={i} className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-3 mb-1">{line.slice(3)}</h3>;
-        if (line.startsWith('# '))  return <h2 key={i} className="text-base font-bold text-slate-800 dark:text-slate-100 mt-3 mb-1">{line.slice(2)}</h2>;
-        if (line.startsWith('- ') || line.startsWith('* ')) return <li key={i} className="text-sm ml-4 list-disc text-slate-600 dark:text-slate-400">{line.slice(2)}</li>;
-        if (line.startsWith('**') && line.endsWith('**')) return <p key={i} className="text-sm font-semibold text-slate-700 dark:text-slate-300">{line.slice(2, -2)}</p>;
-        if (line.trim() === '') return <div key={i} className="h-1" />;
-        return <p key={i} className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{line}</p>;
-      })}
+    <div className="max-w-none text-slate-700 dark:text-slate-300 [&>h2]:text-base [&>h2]:font-bold [&>h2]:text-slate-800 dark:[&>h2]:text-slate-100 [&>h2]:mt-3 [&>h2]:mb-1 [&>h3]:text-sm [&>h3]:font-bold [&>h3]:text-slate-800 dark:[&>h3]:text-slate-100 [&>h3]:mt-3 [&>h3]:mb-1 [&>ul]:list-disc [&>ul]:ml-4 [&>ul]:text-sm [&>ul]:text-slate-600 dark:[&>ul]:text-slate-400 [&>p]:text-sm [&>p]:text-slate-600 dark:[&>p]:text-slate-400 [&>p]:leading-relaxed [&>p]:my-2 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-lg [&_iframe]:my-4">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+      >
+        {content}
+      </ReactMarkdown>
     </div>
   );
 }

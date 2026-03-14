@@ -3,8 +3,8 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'International Economics — IIMV',
-  description: 'Study portal for International Economics, IIM Visakhapatnam MBA 2025–27. Practice questions, flashcards, and lecture notes.',
-  keywords: 'International Economics, IIMV, MBA, IIM Visakhapatnam, study, flashcards, practice questions',
+  description: 'Study portal for International Economics, IIM Visakhapatnam MBA 2025–27. Practice questions and lecture notes.',
+  keywords: 'International Economics, IIMV, MBA, IIM Visakhapatnam, study, practice questions',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
