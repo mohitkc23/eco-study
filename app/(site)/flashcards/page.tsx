@@ -75,34 +75,43 @@ function FlashcardContent() {
   const done = current >= questions.length || (isLast && (sessionStats.mastered + sessionStats.review + sessionStats.skipped) > 0 && !loading);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-[#F8F9FA] dark:bg-[#0A0A0A] selection:bg-blue-100 selection:text-blue-900 flex flex-col">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 px-8 py-5">
-        <nav className="text-xs text-slate-400 mb-2">
-          <Link href="/" className="hover:text-teal-600">Home</Link>
-          <span className="mx-2">›</span>
-          <span className="text-slate-600 dark:text-slate-300">Flashcards</span>
-        </nav>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Flashcards</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Click the card to flip and reveal the answer</p>
+      <div className="px-8 pt-12 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-5xl mx-auto w-full">
+        <div>
+          <nav className="text-xs text-slate-400 mb-4 font-medium uppercase tracking-widest">
+            <Link href="/" className="hover:text-[#0066FF] transition-colors">Home</Link>
+            <span className="mx-3 text-slate-300 dark:text-slate-700">/</span>
+            <span className="text-slate-900 dark:text-slate-100">Flashcards</span>
+          </nav>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
+            Mastery <span className="font-serif italic font-medium text-[#0066FF] ml-1">Cards</span>
+          </h1>
+          <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-md">
+            Click the card to flip and reveal the answer. Track your progress across study sessions.
+          </p>
+        </div>
+        <div className="flex gap-4 items-center bg-white dark:bg-slate-900 px-5 py-3 rounded-full shadow-sm border border-slate-100 dark:border-slate-800 shrink-0">
+          <div className="flex flex-col items-center">
+            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-0.5">Mastered</span>
+            <span className="text-lg font-black text-[#0066FF] leading-none">{sessionStats.mastered}</span>
           </div>
-          <div className="flex gap-3 text-sm">
-            <span className="flex items-center gap-1 text-green-600 dark:text-green-400 font-medium">
-              <span className="text-base">✅</span> {sessionStats.mastered}
-            </span>
-            <span className="flex items-center gap-1 text-orange-500 dark:text-orange-400 font-medium">
-              <span className="text-base">🔄</span> {sessionStats.review}
-            </span>
-            <span className="text-slate-400 dark:text-slate-500">
-              {masteredIds.length} mastered total
-            </span>
+          <div className="w-px h-8 bg-slate-100 dark:bg-slate-800" />
+          <div className="flex flex-col items-center">
+            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-0.5">Review</span>
+            <span className="text-lg font-black text-amber-500 leading-none">{sessionStats.review}</span>
+          </div>
+          <div className="w-px h-8 bg-slate-100 dark:bg-slate-800" />
+          <div className="flex flex-col items-center">
+            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-0.5">Total</span>
+            <span className="text-lg font-black text-slate-900 dark:text-white leading-none">{masteredIds.length}</span>
           </div>
         </div>
+      </div>
 
-        {/* Topic filter */}
-        <div className="flex gap-2 mt-4 flex-wrap">
+      {/* Topic filter - Pill styled */}
+      <div className="px-8 pb-10 max-w-5xl mx-auto w-full">
+        <div className="flex gap-2.5 flex-wrap">
           <FilterChip label="All Topics" active={selectedTopic === 'all'} onClick={() => setSelectedTopic('all')} />
           {topics.map((t) => (
             <FilterChip key={t.id} label={t.name} active={selectedTopic === t.id} onClick={() => setSelectedTopic(t.id)} />
@@ -110,140 +119,161 @@ function FlashcardContent() {
         </div>
       </div>
 
-      <div className="px-8 py-8 max-w-2xl mx-auto">
+      <div className="px-6 pb-24 max-w-3xl mx-auto w-full flex-1 flex flex-col items-center">
         {loading ? (
-          <div className="flex items-center justify-center py-24">
-            <div className="w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="w-10 h-10 border-4 border-[#0066FF] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : questions.length === 0 ? (
-          <div className="text-center py-16 text-slate-400">
-            <p className="text-5xl mb-4">🃏</p>
-            <p className="font-medium text-base">No flashcards found.</p>
-            <p className="text-sm mt-1">Add questions via the <Link href="/admin/questions" className="text-teal-600 hover:underline">Admin Panel</Link>.</p>
+          <div className="flex-1 flex flex-col items-center justify-center text-center text-slate-400 opacity-60">
+            <p className="text-6xl mb-6">🃏</p>
+            <p className="font-bold text-xl text-slate-900 dark:text-white mb-2">No flashcards found.</p>
+            <p className="text-sm max-w-xs">
+              Add questions via the <Link href="/admin/questions" className="text-[#0066FF] hover:underline">Admin Panel</Link>.
+            </p>
           </div>
         ) : done ? (
-          /* Session complete screen */
-          <div className="text-center py-16 animate-fade-in">
-            <div className="text-6xl mb-4">🎉</div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Session Complete!</h2>
-            <p className="text-slate-400 mb-6">You went through {questions.length} cards.</p>
-            <div className="flex justify-center gap-6 mb-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-500">{sessionStats.mastered}</div>
-                <div className="text-xs text-slate-400 mt-1">Mastered</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-orange-500">{sessionStats.review}</div>
-                <div className="text-xs text-slate-400 mt-1">Need Review</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-400">{sessionStats.skipped}</div>
-                <div className="text-xs text-slate-400 mt-1">Skipped</div>
+          /* Session complete screen (Infographic style) */
+          <div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in w-full">
+            <div className="relative w-48 h-48 mb-8 flex items-center justify-center">
+              <svg className="absolute inset-0 w-full h-full -rotate-90">
+                <circle cx="96" cy="96" r="88" className="stroke-slate-100 dark:stroke-slate-800" strokeWidth="12" fill="none" />
+                <circle 
+                  cx="96" cy="96" r="88" 
+                  className="stroke-[#0066FF] drop-shadow-md transition-all duration-1000 ease-out" 
+                  strokeWidth="12" 
+                  fill="none" 
+                  strokeDasharray={`${2 * Math.PI * 88}`}
+                  strokeDashoffset={`${2 * Math.PI * 88 * (1 - (sessionStats.mastered / Math.max(1, sessionStats.mastered + sessionStats.review)))}`}
+                  strokeLinecap="round" 
+                />
+              </svg>
+              <div className="flex flex-col items-center justify-center space-y-1">
+                <span className="text-5xl font-black text-slate-900 dark:text-white">
+                  {Math.round((sessionStats.mastered / Math.max(1, sessionStats.mastered + sessionStats.review)) * 100) || 0}%
+                </span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Mastery</span>
               </div>
             </div>
+            
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-3">Session Complete!</h2>
+            <p className="text-slate-500 mb-10">You went through {questions.length} cards today. Great job.</p>
+            
+            <div className="flex justify-center gap-12 mb-12">
+              <div className="text-center">
+                <div className="text-4xl font-black text-[#0066FF]">{sessionStats.mastered}</div>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Mastered</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-black text-amber-500">{sessionStats.review}</div>
+                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Needs Review</div>
+              </div>
+            </div>
+            
             <button
               onClick={fetchQuestions}
-              className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl transition-colors shadow-sm"
+              className="px-10 py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/20"
             >
-              🔄 Start New Session
+              Start New Session
             </button>
           </div>
         ) : (
-          <>
-            {/* Progress bar */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex-1 bg-gray-200 dark:bg-slate-800 rounded-full h-1.5">
-                <div
-                  className="bg-gradient-to-r from-teal-500 to-teal-400 h-1.5 rounded-full transition-all duration-500"
-                  style={{ width: `${((current + 1) / questions.length) * 100}%` }}
-                />
-              </div>
-              <span className="text-xs text-slate-400 shrink-0 font-medium">{current + 1} / {questions.length}</span>
-            </div>
-
-            {/* Tags */}
-            <div className="flex gap-2 mb-4 flex-wrap">
-              {q.topics && (
-                <span className="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">
-                  {q.topics.name}
-                </span>
-              )}
-              <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                q.difficulty === 'easy' ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400' :
-                q.difficulty === 'hard' ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400' :
-                'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-400'
-              }`}>{q.difficulty}</span>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium">
-                {q.marks} {q.marks === 1 ? 'mark' : 'marks'}
-              </span>
-              {progressData.flashcardMastered[q.id] && (
-                <span className="text-xs px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 font-medium">
-                  ✅ Previously mastered
-                </span>
-              )}
-            </div>
-
+          <div className="w-full flex-1 flex flex-col relative pt-4">
+            
             {/* The flip card */}
             <div
-              className="perspective cursor-pointer select-none mb-6"
-              style={{ height: '280px' }}
+              className="perspective cursor-pointer select-none mb-10 w-full"
+              style={{ minHeight: '380px' }}
               onClick={() => setFlipped((f) => !f)}
               role="button"
               aria-label={flipped ? 'Hide answer' : 'Reveal answer'}
             >
-              <div className={`card-inner w-full h-full ${flipped ? 'flipped' : ''}`}>
+              <div className={`card-inner w-full h-full transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] ${flipped ? 'flipped' : ''}`}>
+                
                 {/* Front — Question */}
-                <div className="card-face bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center shadow-sm">
-                  <p className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest mb-4">Question</p>
-                  <p className="text-base font-medium text-slate-800 dark:text-slate-100 text-center leading-relaxed">
-                    {q.question_text}
-                  </p>
-                  <p className="text-xs text-slate-300 dark:text-slate-600 mt-6">Tap to reveal answer →</p>
+                <div className="card-face bg-white dark:bg-[#111] border border-slate-100 dark:border-white/5 rounded-[2.5rem] p-10 flex flex-col shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] dark:shadow-none hover:shadow-[0_25px_50px_-20px_rgba(0,0,0,0.1)] transition-shadow">
+                  {/* Top tags area */}
+                  <div className="flex justify-between items-start mb-auto">
+                    <span className="inline-flex px-4 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wider uppercase">
+                      Question {current + 1} / {questions.length}
+                    </span>
+                    {progressData.flashcardMastered[q.id] && (
+                      <span className="inline-flex px-4 py-1.5 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/50 text-xs font-bold text-green-600 dark:text-green-400 tracking-wider uppercase">
+                        ✅ Mastered
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* Center Question */}
+                  <div className="flex-1 flex flex-col justify-center items-center text-center my-8">
+                    <span className="text-sm font-serif italic text-[#0066FF] mb-4">
+                      {q.topics?.name}
+                    </span>
+                    <p className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white leading-[1.3] balance-text">
+                      {q.question_text}
+                    </p>
+                  </div>
+                  
+                  {/* Bottom hint */}
+                  <div className="mt-auto flex justify-center">
+                    <span className="text-sm font-medium text-slate-400 bg-slate-50 dark:bg-slate-800/50 px-5 py-2 rounded-full">
+                      Tap anywhere to flip
+                    </span>
+                  </div>
                 </div>
 
                 {/* Back — Answer */}
-                <div className="card-face card-back bg-teal-50 dark:bg-teal-900/20 border-2 border-teal-200 dark:border-teal-800 rounded-2xl p-8 flex flex-col items-start justify-center shadow-sm overflow-y-auto">
-                  <p className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest mb-4">Model Answer</p>
-                  <p className="text-sm text-teal-900 dark:text-teal-100 leading-relaxed whitespace-pre-wrap">
-                    {q.model_answer}
-                  </p>
+                <div className="card-face card-back bg-slate-50 dark:bg-[#111] border border-slate-200 dark:border-white/5 rounded-[2.5rem] p-10 flex flex-col shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] dark:shadow-none">
+                  <div className="mb-6 flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
+                     <span className="text-xs font-bold text-[#0066FF] uppercase tracking-widest">Model Answer</span>
+                     <span className="text-xs font-bold text-slate-400 bg-white dark:bg-slate-900 px-3 py-1 rounded-full border border-slate-100 dark:border-slate-800">
+                       {q.marks} {q.marks === 1 ? 'mark' : 'marks'}
+                     </span>
+                  </div>
+                  <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+                    <p className="text-base md:text-lg font-medium text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
+                      {q.model_answer}
+                    </p>
+                  </div>
                 </div>
+                
               </div>
             </div>
 
-            {/* Action buttons — only show after flip */}
-            {flipped ? (
-              <div className="flex gap-3 animate-fade-in">
-                <button
-                  onClick={handleMastered}
-                  className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2"
-                >
-                  ✅ Got it!
-                </button>
-                <button
-                  onClick={handleReview}
-                  className="flex-1 py-3 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2"
-                >
-                  🔄 Review again
-                </button>
-                <button
-                  onClick={handleSkip}
-                  className="px-5 py-3 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium rounded-xl transition-colors"
-                >
-                  Skip
-                </button>
-              </div>
-            ) : (
-              <div className="flex justify-center">
-                <button
-                  onClick={() => setFlipped(true)}
-                  className="px-8 py-3 border-2 border-dashed border-teal-300 dark:border-teal-700 rounded-xl text-sm font-medium text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors"
-                >
-                  Show Answer
-                </button>
-              </div>
-            )}
-          </>
+            {/* Action buttons — Pill shaped, distinct */}
+            <div className="mt-auto h-16 flex items-center justify-center">
+              {flipped ? (
+                <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-fade-in">
+                   <button
+                    onClick={(e) => { e.stopPropagation(); handleSkip(); }}
+                    className="px-8 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 font-bold rounded-full transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
+                  >
+                    Skip
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleReview(); }}
+                    className="px-8 py-3.5 bg-white dark:bg-[#111] border-2 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold rounded-full transition-colors hover:border-slate-300 dark:hover:border-slate-600 shadow-sm"
+                  >
+                    Needs Review
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleMastered(); }}
+                    className="px-10 py-3.5 bg-[#0066FF] hover:bg-blue-600 text-white font-bold rounded-full transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/25"
+                  >
+                    Got it!
+                  </button>
+                </div>
+              ) : (
+                <div className="w-full max-w-md bg-slate-100 dark:bg-slate-900/50 rounded-full h-1.5 overflow-hidden">
+                  <div
+                    className="bg-slate-300 dark:bg-slate-600 h-full transition-all duration-500 ease-out"
+                    style={{ width: `${((current) / questions.length) * 100}%` }}
+                  />
+                </div>
+              )}
+            </div>
+
+          </div>
         )}
       </div>
     </div>
@@ -254,10 +284,10 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+      className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${
         active
-          ? 'bg-teal-600 text-white shadow-sm'
-          : 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-teal-300'
+          ? 'bg-[#0066FF] text-white shadow-md shadow-blue-500/20 border border-[#0066FF]'
+          : 'bg-white dark:bg-[#111] border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-800 dark:hover:text-slate-200'
       }`}
     >
       {label}
